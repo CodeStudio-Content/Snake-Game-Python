@@ -32,9 +32,9 @@ The code only runs when executed directly, it creates an instance of the Game cl
 
 ## Blog
 
-Check out our project blog post for more information on the development process and our thoughts on the Bank Management project:
+Check out our project blog post for more information on the development process and our thoughts on the Snake Game project:
 
-* [Snake Game Using Python](https://www.codingninjas.com/codestudio/library/snake-game-project-in-python?utm_source=github&utm_medium=organic&utm_campaign=blog-snake-game-project-in-python)
+* [Snake Game Using Python](https://www.codingninjas.com/codestudio/library/snake-game-in-python?utm_source=github&utm_medium=organic&utm_campaign=blog-snake-game-in-python)
 
 
 
