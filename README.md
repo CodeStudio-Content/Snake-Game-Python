@@ -30,6 +30,13 @@ The code only runs when executed directly, it creates an instance of the Game cl
 2. Open a terminal window and navigate to the cloned repository.
 3. Run the following command to start the program: `python game.py`
 
+## Blog
+
+Check out our project blog post for more information on the development process and our thoughts on the Bank Management project:
+
+* [Snake Game Using Python](https://www.codingninjas.com/codestudio/library/snake-game-project-in-python?utm_source=github&utm_medium=organic&utm_campaign=blog-snake-game-project-in-python)
+
+
 
 ## Code Structure
 
