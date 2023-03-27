@@ -6,7 +6,7 @@ BOARD_WIDTH = 600
 BOARD_HEIGHT = 600
 CELL_SIZE = 20
 INITIAL_SPEED = 200
-OBSTACLE_COUNT = 8
+OBSTACLE_COUNT = 10
 COLORS = ["green", "red", "blue", "yellow"]
 DIRECTIONS = {"Up": (0, -1), "Down": (0, 1), "Left": (-1, 0), "Right": (1, 0)}
 
@@ -118,6 +118,7 @@ class Obstacle:
 
 
 class Game:
+    high_scores = []
     def __init__(self):
         self.window = tk.Tk()
         self.canvas = tk.Canvas(self.window, width=BOARD_WIDTH, height=BOARD_HEIGHT)
@@ -130,7 +131,7 @@ class Game:
         self.level = 1
         self.setup_obstacles()
         self.paused = False 
-        self.high_scores = []
+        
         self.high_score = 0
 
         # Bind arrow keys to snake movement
@@ -147,29 +148,58 @@ class Game:
     def setup_obstacles(self):
         for i in range(OBSTACLE_COUNT):
             obstacle = Obstacle(self.canvas)
+            
+            # Check if the obstacle overlaps with the snake or the food
             while self.snake.check_obstacle(self.obstacle_list) or \
-                  (obstacle.x, obstacle.y) == (self.food.x, self.food.y):
+                (obstacle.x, obstacle.y) == (self.food.x, self.food.y):
                 obstacle.move()
+            
+            # If the current level is 2, generate additional obstacles
+            if self.level == 2:
+                for j in range(2):
+                    obstacle2 = Obstacle(self.canvas)
+                    
+                    # Check if the obstacle overlaps with the snake, food or other obstacles
+                    while self.snake.check_obstacle(self.obstacle_list) or \
+                        (obstacle2.x, obstacle2.y) == (self.food.x, self.food.y) or \
+                        (obstacle2.x, obstacle2.y) in self.obstacle_list:
+                        obstacle2.move()
+                    
+                    # Add the new obstacle to the list
+                    self.obstacle_list.append((obstacle2.x, obstacle2.y))
+            
+            # Add the original obstacle to the list
             self.obstacle_list.append((obstacle.x, obstacle.y))
-    
+
+
     def update_score(self):
         self.score += 1
         
         if self.score % 10 == 0:
-            self.level += 1
+            if self.level < 3:
+                self.level += 1
+            else:
+                print("Game over")
             self.speed = 200
             self.canvas.delete("obstacle")
             self.obstacle_list = []
             self.setup_obstacles()
             
+        
+        #  code for initializing the game window and canvas
+        if len(Game.high_scores) < 10: # check if there are less than 10 high scores
+            Game.high_scores += [0] * (10 - len(Game.high_scores)) # pad with zeros
+
+            
         # Update the current score and the highest score
         if self.score > self.high_score:
             self.high_score = self.score
             
-            if self.high_score not in self.high_scores:
-                self.high_scores.append(self.high_score)
+            if self.high_score > Game.high_scores[-1]:
+                Game.high_scores.append(self.high_score)
+                Game.high_scores = sorted(Game.high_scores, reverse=True)[:10]
         
-        self.window.title(f"Snake - Level {self.level} - Score {self.score} - High Score {max(self.high_scores)}")
+        self.window.title(f"Snake - Level {self.level} - Score {self.score} - High Score {Game.high_scores[0]}")
     
     def game_loop(self):
         if not self.paused:   # Pause game if paused is True
@@ -220,9 +250,9 @@ class Game:
     def restart_game(self):
         # Destroy current window
         self.window.destroy()
-        if self.score > self.high_score:
-            self.high_score = self.score
-        self.score = 0
+        # if self.score > self.high_score:
+        #     self.high_score = self.score
+        # self.score = 0
 
         # Create new instance of Game class
         new_game = Game()
