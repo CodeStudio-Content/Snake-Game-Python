@@ -250,9 +250,6 @@ class Game:
     def restart_game(self):
         # Destroy current window
         self.window.destroy()
-        # if self.score > self.high_score:
-        #     self.high_score = self.score
-        # self.score = 0
 
         # Create new instance of Game class
         new_game = Game()
